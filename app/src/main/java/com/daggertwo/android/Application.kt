@@ -8,6 +8,8 @@ import android.app.Application
 import com.daggertwo.android.common.di.ApplicationComponent
 import com.daggertwo.android.common.di.DaggerApplicationComponent
 import com.daggertwo.android.common.di.modules.AndroidModule
+import com.daggertwo.android.common.di.modules.DataModule
+import com.daggertwo.android.data.User
 
 class Application : Application() {
 
@@ -15,7 +17,11 @@ class Application : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        component = DaggerApplicationComponent.builder().androidModule(AndroidModule(this)).build()
+        component = DaggerApplicationComponent
+                .builder()
+                .androidModule(AndroidModule(this))
+                .dataModule(DataModule(User()))
+                .build()
 
     }
 }
