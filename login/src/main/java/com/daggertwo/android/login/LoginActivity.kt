@@ -23,11 +23,12 @@ import android.widget.TextView
 
 import java.util.ArrayList
 import android.Manifest.permission.READ_CONTACTS
+import android.daggertwo.com.data.models.User
 
 import kotlinx.android.synthetic.main.activity_login.*
 
 /**
- * A login screen that offers login via email/password.
+ * A login screen that offers login via username/password.
  */
 class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     /**
@@ -48,7 +49,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             false
         })
 
-        email_sign_in_button.setOnClickListener { attemptLogin() }
+       sign_in_button.setOnClickListener { attemptLogin() }
     }
 
     private fun populateAutoComplete() {
@@ -67,7 +68,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             return true
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
-            Snackbar.make(email, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(username, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
                     .setAction(android.R.string.ok,
                             { requestPermissions(arrayOf(READ_CONTACTS), REQUEST_READ_CONTACTS) })
         } else {
@@ -91,7 +92,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
     /**
      * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
+     * If there are form errors (invalid username, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
     private fun attemptLogin() {
@@ -100,11 +101,11 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         }
 
         // Reset errors.
-        email.error = null
+        username.error = null
         password.error = null
 
         // Store values at the time of the login attempt.
-        val emailStr = email.text.toString()
+        val usernameStr = username.text.toString()
         val passwordStr = password.text.toString()
 
         var cancel = false
@@ -117,14 +118,14 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             cancel = true
         }
 
-        // Check for a valid email address.
-        if (TextUtils.isEmpty(emailStr)) {
-            email.error = getString(R.string.error_field_required)
-            focusView = email
+        // Check for a valid username address.
+        if (TextUtils.isEmpty(usernameStr)) {
+            username.error = getString(R.string.error_field_required)
+            focusView = username
             cancel = true
-        } else if (!isEmailValid(emailStr)) {
-            email.error = getString(R.string.error_invalid_email)
-            focusView = email
+        } else if (!isValidUsername(usernameStr)) {
+            username.error = getString(R.string.error_invalid_username)
+            focusView = username
             cancel = true
         }
 
@@ -136,14 +137,15 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true)
-            mAuthTask = UserLoginTask(emailStr, passwordStr)
+
+            mAuthTask = UserLoginTask(usernameStr, passwordStr)
             mAuthTask!!.execute(null as Void?)
         }
     }
 
-    private fun isEmailValid(email: String): Boolean {
+    private fun isValidUsername(username: String): Boolean {
         //TODO: Replace this with your own logic
-        return email.contains("@")
+        return username.length>4
     }
 
     private fun isPasswordValid(password: String): Boolean {
@@ -195,36 +197,36 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 Uri.withAppendedPath(ContactsContract.Profile.CONTENT_URI,
                         ContactsContract.Contacts.Data.CONTENT_DIRECTORY), ProfileQuery.PROJECTION,
 
-                // Select only email addresses.
+                // Select only username addresses.
                 ContactsContract.Contacts.Data.MIMETYPE + " = ?", arrayOf(ContactsContract.CommonDataKinds.Email
                 .CONTENT_ITEM_TYPE),
 
-                // Show primary email addresses first. Note that there won't be
-                // a primary email address if the user hasn't specified one.
+                // Show primary username addresses first. Note that there won't be
+                // a primary username address if the user hasn't specified one.
                 ContactsContract.Contacts.Data.IS_PRIMARY + " DESC")
     }
 
     override fun onLoadFinished(cursorLoader: Loader<Cursor>, cursor: Cursor) {
-        val emails = ArrayList<String>()
+        val username = ArrayList<String>()
         cursor.moveToFirst()
         while (!cursor.isAfterLast) {
-            emails.add(cursor.getString(ProfileQuery.ADDRESS))
+            username.add(cursor.getString(ProfileQuery.ADDRESS))
             cursor.moveToNext()
         }
 
-        addEmailsToAutoComplete(emails)
+        addEmailsToAutoComplete(username)
     }
 
     override fun onLoaderReset(cursorLoader: Loader<Cursor>) {
 
     }
 
-    private fun addEmailsToAutoComplete(emailAddressCollection: List<String>) {
+    private fun addEmailsToAutoComplete(usernameAddressCollection: List<String>) {
         //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
         val adapter = ArrayAdapter(this@LoginActivity,
-                android.R.layout.simple_dropdown_item_1line, emailAddressCollection)
+                android.R.layout.simple_dropdown_item_1line, usernameAddressCollection)
 
-        email.setAdapter(adapter)
+        username.setAdapter(adapter)
     }
 
     object ProfileQuery {
@@ -239,8 +241,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
      * Represents an asynchronous login/registration task used to authenticate
      * the user.
      */
-    inner class UserLoginTask internal constructor(private val mEmail: String, private val mPassword: String) : AsyncTask<Void, Void, Boolean>() {
-
+    inner class UserLoginTask internal constructor(private val username: String, private val mPassword: String) : AsyncTask<Void, Void, Boolean>() {
+        val user = User("dilip", "password")
         override fun doInBackground(vararg params: Void): Boolean? {
             // TODO: attempt authentication against a network service.
 
@@ -251,14 +253,10 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
                 return false
             }
 
-            return DUMMY_CREDENTIALS
-                    .map { it.split(":") }
-                    .firstOrNull { it[0] == mEmail }
-                    ?.let {
-                        // Account exists, return true if the password matches.
-                        it[1] == mPassword
-                    }
-                    ?: true
+            if (username == user.username && mPassword == user.password) {
+                return true
+            }
+            return false
         }
 
         override fun onPostExecute(success: Boolean?) {
@@ -266,7 +264,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             showProgress(false)
 
             if (success!!) {
-                finish()
+              println(user.username())
             } else {
                 password.error = getString(R.string.error_incorrect_password)
                 password.requestFocus()
@@ -285,11 +283,5 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
          * Id to identity READ_CONTACTS permission request.
          */
         private val REQUEST_READ_CONTACTS = 0
-
-        /**
-         * A dummy authentication store containing known user names and passwords.
-         * TODO: remove after connecting to a real authentication system.
-         */
-        private val DUMMY_CREDENTIALS = arrayOf("foo@example.com:hello", "bar@example.com:world")
     }
 }
