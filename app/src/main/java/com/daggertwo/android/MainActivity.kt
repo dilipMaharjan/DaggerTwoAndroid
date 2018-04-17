@@ -17,8 +17,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var user1=com.daggertwo.android.login.data.User("test","test")
-        print("test: $user1")
         component.inject(this)
 //        println("The context : $context")
 //        println(user.getUsers())
