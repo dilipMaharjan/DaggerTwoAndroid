@@ -1,6 +1,7 @@
 package com.daggertwo.android.login.di.modules
 
 import android.daggertwo.com.data.models.User
+import com.daggertwo.android.login.di.modules.scope.LoginScope
 import dagger.Module
 import dagger.Provides
 
@@ -10,6 +11,9 @@ import dagger.Provides
  */
 @Module
 class LoginModule {
+    @LoginScope
     @Provides
-    fun providesUser() = User("dilip", "password")
+    fun providesUser(): String {
+        return "String"
+    }
 }

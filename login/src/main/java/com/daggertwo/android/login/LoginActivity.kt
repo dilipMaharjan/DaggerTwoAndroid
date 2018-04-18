@@ -1,31 +1,31 @@
 package com.daggertwo.android.login
 
+import android.Manifest.permission.READ_CONTACTS
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.annotation.TargetApi
-import android.content.pm.PackageManager
-import android.support.design.widget.Snackbar
-import android.support.v7.app.AppCompatActivity
 import android.app.LoaderManager.LoaderCallbacks
 import android.content.CursorLoader
 import android.content.Loader
+import android.content.pm.PackageManager
+import android.daggertwo.com.data.models.User
 import android.database.Cursor
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.support.design.widget.Snackbar
+import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.TextView
-
-import java.util.ArrayList
-import android.Manifest.permission.READ_CONTACTS
-import android.daggertwo.com.data.models.User
-
+import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
+import java.util.*
+import javax.inject.Inject
 
 /**
  * A login screen that offers login via username/password.
@@ -35,8 +35,11 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private var mAuthTask: UserLoginTask? = null
+    @Inject
+    lateinit var str: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         // Set up the login form.
@@ -49,7 +52,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             false
         })
 
-       sign_in_button.setOnClickListener { attemptLogin() }
+        sign_in_button.setOnClickListener { attemptLogin() }
+        print(str)
     }
 
     private fun populateAutoComplete() {
@@ -145,7 +149,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
     private fun isValidUsername(username: String): Boolean {
         //TODO: Replace this with your own logic
-        return username.length>4
+        return username.length > 4
     }
 
     private fun isPasswordValid(password: String): Boolean {
@@ -264,7 +268,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
             showProgress(false)
 
             if (success!!) {
-              println(user.username())
+                println(user.username())
             } else {
                 password.error = getString(R.string.error_incorrect_password)
                 password.requestFocus()

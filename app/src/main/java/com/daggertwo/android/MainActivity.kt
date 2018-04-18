@@ -3,7 +3,7 @@ package com.daggertwo.android
 import android.content.Context
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import com.daggertwo.android.common.di.component
+import dagger.android.AndroidInjection
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        component.inject(this)
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         println("Context: $context")
