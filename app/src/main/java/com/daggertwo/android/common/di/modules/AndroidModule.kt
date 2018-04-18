@@ -14,5 +14,5 @@ import dagger.Provides
 class AndroidModule(private val application: Application) {
 
     @Provides
-    fun provideApplication(): Context = application
+    fun provideApplicationContext(): Context = application
 }

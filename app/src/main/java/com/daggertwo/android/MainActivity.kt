@@ -11,8 +11,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var context: Context
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        component.inject(this)
+        println("Context: $context")
     }
 }
