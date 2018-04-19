@@ -35,8 +35,12 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private var mAuthTask: UserLoginTask? = null
+
     @Inject
     lateinit var str: String
+
+    @Inject
+    lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -53,7 +57,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
         })
 
         sign_in_button.setOnClickListener { attemptLogin() }
-        print(str)
+        println("Injected String: $str")
+        println(user)
     }
 
     private fun populateAutoComplete() {

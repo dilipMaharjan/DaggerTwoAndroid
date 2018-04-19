@@ -13,7 +13,13 @@ import dagger.Provides
 class LoginModule {
     @LoginScope
     @Provides
-    fun providesUser(): String {
-        return "String"
+    fun providesString(): String {
+        return "FromLoginModule"
+    }
+
+    @LoginScope
+    @Provides
+    fun providesUser(): User {
+        return User("username", "password")
     }
 }
