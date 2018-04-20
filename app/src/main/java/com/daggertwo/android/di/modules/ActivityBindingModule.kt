@@ -1,7 +1,7 @@
-package com.daggertwo.android.common.di.modules
+package com.daggertwo.android.di.modules
 
 import com.daggertwo.android.MainActivity
-import com.daggertwo.android.common.di.scopes.PerActivity
+import com.daggertwo.android.di.scopes.PerActivity
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

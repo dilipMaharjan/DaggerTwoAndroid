@@ -1,4 +1,4 @@
-package com.daggertwo.android.common.di.scopes
+package com.daggertwo.android.di.scopes
 
 import javax.inject.Scope
 

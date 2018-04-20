@@ -39,8 +39,8 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
     @Inject
     lateinit var str: String
 
-    @Inject
-    lateinit var user: User
+//    @Inject
+//    lateinit var user: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
@@ -58,7 +58,7 @@ class LoginActivity : AppCompatActivity(), LoaderCallbacks<Cursor> {
 
         sign_in_button.setOnClickListener { attemptLogin() }
         println("Injected String: $str")
-        println(user)
+//        println(user)
     }
 
     private fun populateAutoComplete() {

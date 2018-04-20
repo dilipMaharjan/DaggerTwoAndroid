@@ -1,4 +1,4 @@
-package com.daggertwo.android.common.di.modules
+package com.daggertwo.android.di.modules
 
 import android.app.Application
 import android.content.Context
