@@ -1,7 +1,7 @@
 package com.daggertwo.android.login.di.modules
 
 import com.daggertwo.android.login.LoginActivity
-import com.daggertwo.android.login.di.modules.scope.LoginScope
+import com.daggertwo.android.login.di.scope.LoginScope
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

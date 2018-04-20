@@ -22,6 +22,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.daggertwo.android.login.R.id.*
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.activity_login.*
 import java.util.*

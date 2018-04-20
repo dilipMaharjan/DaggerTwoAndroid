@@ -1,4 +1,4 @@
-package com.daggertwo.android.login.di.modules.scope
+package com.daggertwo.android.login.di.scope
 
 import javax.inject.Scope
 

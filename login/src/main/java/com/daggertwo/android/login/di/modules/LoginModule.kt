@@ -1,7 +1,7 @@
 package com.daggertwo.android.login.di.modules
 
 import android.daggertwo.com.data.models.User
-import com.daggertwo.android.login.di.modules.scope.LoginScope
+import com.daggertwo.android.login.di.scope.LoginScope
 import dagger.Module
 import dagger.Provides
 
