@@ -12,7 +12,6 @@ import com.daggertwo.android.common.di.modules.AndroidModule
 class Application : Application() {
 
     lateinit var component: ApplicationComponent
-
     override fun onCreate() {
         super.onCreate()
         component = DaggerApplicationComponent

@@ -2,6 +2,7 @@ package com.daggertwo.android.common.di.modules
 
 import android.app.Application
 import android.content.Context
+import android.daggertwo.com.data.models.User
 import dagger.Module
 import dagger.Provides
 
@@ -15,4 +16,7 @@ class AndroidModule(private val application: Application) {
 
     @Provides
     fun provideApplicationContext(): Context = application
+
+    @Provides
+    fun providesUser() = User("username", "password")
 }
